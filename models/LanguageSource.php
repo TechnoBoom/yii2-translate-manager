@@ -8,6 +8,7 @@
 namespace lajax\translatemanager\models;
 
 use Yii;
+use yii\mongodb\ActiveRecord;
 
 /**
  * This is the model class for table "language_source".
@@ -22,18 +23,21 @@ use Yii;
  * @property LanguageTranslate $languageTranslate
  * @property Language[] $languages
  */
-class LanguageSource extends \yii\db\ActiveRecord
+class LanguageSource extends ActiveRecord
 {
 
     const INSERT_LANGUAGE_ITEMS_LIMIT = 10;
 
     /**
-     * @inheritdoc
+     * @return array
      */
-    public static function tableName()
+    public static function collectionName()
     {
-        $dbMessageSources = Yii::getObjectVars(Yii::$app->i18n->getMessageSource('DbMessageSource'));
-        return isset($dbMessageSources['sourceMessageTable']) ? $dbMessageSources['sourceMessageTable'] : '{{%source_message}}';
+        $dbMessageSources = Yii::getObjectVars(Yii::$app->i18n->getMessageSource('MongoDbMessageSource'));
+        return [
+            'product-suite',
+            isset($dbMessageSources['sourceMessageTable']) ? $dbMessageSources['sourceMessageTable'] : '{{%source_message}}'
+        ];
     }
 
     /**

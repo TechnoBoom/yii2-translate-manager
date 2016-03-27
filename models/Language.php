@@ -8,6 +8,7 @@
 namespace lajax\translatemanager\models;
 
 use Yii;
+use yii\mongodb\ActiveRecord;
 
 /**
  * This is the model class for table "language".
@@ -22,7 +23,7 @@ use Yii;
  * @property LanguageTranslate $languageTranslate
  * @property LanguageSource[] $languageSources
  */
-class Language extends \yii\db\ActiveRecord {
+class Language extends ActiveRecord {
 
     /**
      * Status of inactive language.
@@ -51,11 +52,14 @@ class Language extends \yii\db\ActiveRecord {
     ];
 
     /**
-     * @inheritdoc
+     * @return array
      */
-    public static function tableName() {
-        return Yii::$app->getModule('translatemanager') ?
-               Yii::$app->getModule('translatemanager')->languageTable : '{{%language}}';
+    public static function collectionName()
+    {
+        return [
+            'product-suite',
+            Yii::$app->getModule('translatemanager') ? Yii::$app->getModule('translatemanager')->languageTable : '{{%language}}'
+        ];
     }
 
     /**
