@@ -33,10 +33,21 @@ class LanguageSource extends ActiveRecord
      */
     public static function collectionName()
     {
-        $dbMessageSources = Yii::getObjectVars(Yii::$app->i18n->getMessageSource('MongoDbMessageSource'));
+        return ['product-suite', 'language_source'];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributes()
+    {
         return [
-            'product-suite',
-            isset($dbMessageSources['sourceMessageTable']) ? $dbMessageSources['sourceMessageTable'] : '{{%source_message}}'
+            '_id',
+            'id',
+            'category',
+            'message',
+            'source',
+            'translation',
         ];
     }
 

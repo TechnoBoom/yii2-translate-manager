@@ -56,9 +56,23 @@ class Language extends ActiveRecord {
      */
     public static function collectionName()
     {
+        return ['product-suite', 'language'];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributes()
+    {
         return [
-            'product-suite',
-            Yii::$app->getModule('translatemanager') ? Yii::$app->getModule('translatemanager')->languageTable : '{{%language}}'
+            '_id',
+            'id',
+            'language_id',
+            'language',
+            'country',
+            'name',
+            'name_ascii',
+            'status',
         ];
     }
 

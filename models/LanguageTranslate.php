@@ -32,10 +32,20 @@ class LanguageTranslate extends ActiveRecord {
      */
     public static function collectionName()
     {
-        $dbMessageSources = Yii::getObjectVars(Yii::$app->i18n->getMessageSource('MongoDbMessageSource'));
+
+        return ['product-suite', 'language_translate'];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributes()
+    {
         return [
-            'product-suite',
-            isset($dbMessageSources['messageTable']) ? $dbMessageSources['messageTable'] : '{{%message}}'
+            '_id',
+            'id',
+            'language',
+            'translation',
         ];
     }
 
