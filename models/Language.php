@@ -164,15 +164,24 @@ class Language extends ActiveRecord {
             if ($count == 0) {
                 return 0;
             }
+//
+//            $collection = Yii::$app->mongodb->getCollection('language_source');
+//            $collection->find()
 
-            $languageTranslates = LanguageTranslate::find()
-                    ->select(['language', 'COUNT(*) AS cnt'])
-                    ->andWhere('translation IS NOT NULL')
-                    ->group(['language'])
-                    ->all();
+//            $languageTranslates = LanguageTranslate::find()
+//                    ->select(['language', 'COUNT(*) AS cnt'])
+//                    ->andWhere('translation IS NOT NULL')
+//                    ->group(['language'])
+//                    ->all();
 
-            foreach ($languageTranslates as $languageTranslate) {
-                $statistics[$languageTranslate->language] = floor(($languageTranslate->cnt / $count) * 100);
+            $languages = self::find()->all();
+
+//            foreach ($languageTranslates as $languageTranslate) {
+//                $statistics[$languageTranslate->language] = floor(($languageTranslate->cnt / $count) * 100);
+//            }
+            foreach ($languages as $lang) {
+                $count_translates = LanguageTranslate::find()->where(['language' => $lang->language])->count();
+                $statistics[$lang->language] = floor(($count_translates / $count) * 100);
             }
         }
 
