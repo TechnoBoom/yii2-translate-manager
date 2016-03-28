@@ -2,6 +2,7 @@
 
 namespace lajax\translatemanager\services\scanners;
 
+use lajax\translatemanager\models\Language;
 use Yii;
 use yii\helpers\Console;
 use yii\base\InvalidConfigException;
@@ -11,7 +12,7 @@ use lajax\translatemanager\services\Scanner;
  * Detecting existing language elements in database.
  * The connection ids of the scanned databases and the table/field names can be defined in the configuration file of translateManager
  * examples:
- * 
+ *
  * ~~~
  * 'tables' => [
  *  [
@@ -27,8 +28,8 @@ use lajax\translatemanager\services\Scanner;
  *  ]
  * ]
  * ~~~
- * 
- * 
+ *
+ *
  * @author Lajos Molnár <lajax.m@gmail.com>
  * @since 1.0
  */
@@ -85,19 +86,18 @@ class ScannerDatabase {
     private function _scanningTable($tables) {
         $this->_scanner->stdout('Extracting mesages from ' . $tables['table'] . '.' . implode(',', $tables['columns']), Console::FG_GREEN);
         $query = new \yii\db\Query();
-        $data = $query->select($tables['columns'])
-                ->from($tables['table'])
-                ->createCommand(Yii::$app->{$tables['connection']})
-                ->queryAll();
+        $languages = Language::findAll();
+//        $data = $query->select($tables['columns'])
+//                ->from($tables['table'])
+//                ->createCommand(Yii::$app->{$tables['connection']})
+//                ->queryAll();
         $category = $this->_getCategory($tables);
-        foreach ($data as $columns) {
-            $columns = array_map('trim', $columns);
-            foreach ($columns as $column) {
-                $this->_scanner->addLanguageItem($category, $column);
-            }
+        foreach ($languages as $language) {
+//            $columns = array_map('trim', $columns);
+            $this->_scanner->addLanguageItem($category, $language->name_ascii);
         }
     }
-    
+
     /**
      * Returns the language category.
      * @param array $tables
@@ -109,11 +109,11 @@ class ScannerDatabase {
         } else {
             $category = Scanner::CATEGORY_DATABASE;
         }
-        
+
         return $category;
     }
 
-    
+
     /**
      * Returns the normalized database table name.
      * @param string $tableName database table name.

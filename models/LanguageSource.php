@@ -85,18 +85,23 @@ class LanguageSource extends ActiveRecord
         foreach ($languageItems as $category => $messages) {
             foreach (array_keys($messages) as $message) {
                 $data[] = [
-                    $category,
-                    $message
+                    'category' => $category,
+                    'message' => $message
                 ];
             }
         }
 
         $count = count($data);
+        $collection = Yii::$app->mongodb->getCollection('language_source');
+
         for ($i = 0; $i < $count; $i += self::INSERT_LANGUAGE_ITEMS_LIMIT) {
-            static::getDb()
-                    ->createCommand()
-                    ->batchInsert(static::tableName(), ['category', 'message'], array_slice($data, $i, self::INSERT_LANGUAGE_ITEMS_LIMIT))
-                    ->execute();
+            $collection->batchInsert(array_slice($data, $i, self::INSERT_LANGUAGE_ITEMS_LIMIT), []);
+//            $language_item = new LanguageSource();
+//            $language_item->category = $data[$i];
+//            static::getDb()
+//                    ->createCommand()
+//                    ->batchInsert(static::tableName(), ['category', 'message'], array_slice($data, $i, self::INSERT_LANGUAGE_ITEMS_LIMIT))
+//                    ->execute();
         }
 
         return $count;
