@@ -168,7 +168,7 @@ class Language extends ActiveRecord {
             $languageTranslates = LanguageTranslate::find()
                     ->select(['language', 'COUNT(*) AS cnt'])
                     ->andWhere('translation IS NOT NULL')
-                    ->groupBy(['language'])
+                    ->group(['language'])
                     ->all();
 
             foreach ($languageTranslates as $languageTranslate) {
