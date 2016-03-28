@@ -86,7 +86,7 @@ class ScannerDatabase {
     private function _scanningTable($tables) {
         $this->_scanner->stdout('Extracting mesages from ' . $tables['table'] . '.' . implode(',', $tables['columns']), Console::FG_GREEN);
         $query = new \yii\db\Query();
-        $languages = Language::findAll();
+        $languages = Language::find()->all();
 //        $data = $query->select($tables['columns'])
 //                ->from($tables['table'])
 //                ->createCommand(Yii::$app->{$tables['connection']})
